@@ -94,8 +94,7 @@ var _ = {};
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    var passers = [];
-    var failers = [];
+    var passers = [], failers = [];
           _.filter = function(collection, test) {
           for (var i = 0; i < collection.length; i++) {
             if (test(collection[i])) {
@@ -103,7 +102,7 @@ var _ = {};
             }
           }
           return passers;
-          };
+          }; 
     _.filter(collection, test);
     for (var i = 0; i < collection.length; i++) {
         if (passers.indexOf(collection[i]) === -1) {
@@ -115,6 +114,13 @@ var _ = {};
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var uniqCollect = [];
+    for (var i = 0; i < array.length; i++) {
+        if (uniqCollect.indexOf(array[i]) === -1) {
+            uniqCollect.push(array[i]);
+        }
+    }
+    return uniqCollect;
   };
 
 
@@ -123,6 +129,11 @@ var _ = {};
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+      var result = [];
+      for (var i = 0; i < collection.length; i++) {
+        result.push(iterator(collection[i], i, collection));
+    }
+    return result;  
   };
 
   /*
@@ -145,8 +156,19 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {
+  _.invoke = function(collection, functionOrKey, args) {                    // S.O.S.
+                  _.map = function(collection, iterator) {
+                    var result = [];
+                    for (var i = 0; i < collection.length; i++) {
+                      result.push(iterator(collection[i], i, collection));
+                    }
+                    return result;  
+                  };
+    return _.map(collection, function() {
+      return functionOrKey.apply(collection, args);    
+    }); 
   };
+  
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
@@ -162,6 +184,21 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+    var initialValue = typeof accumulator === "undefined" ? collection[0] : accumulator;
+    var previousValue = iterator(initialValue, collection[0]);
+    if (collection.length) {
+      for (var i = 1; i < collection.length; i++) {
+        previousValue = iterator(previousValue, collection[i]);
+      }
+      return previousValue; 
+    }
+    else {
+      for (var j in collection) {
+        previousValue = iterator(previousValue, collection[j]);
+      }
+      return previousValue;
+    }
+      
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -208,11 +245,13 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    return obj;
   };
 
 
