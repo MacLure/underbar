@@ -217,6 +217,25 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+                  _.reduce = function(collection, iterator, truthVal) {
+                  var initialValue = typeof truthVal === "undefined" ? true : truthVal;
+                  var previousValue = iterator(initialValue, collection[0]);
+                  if (collection.length) {
+                    for (var i = 1; i < collection.length; i++) {
+                      previousValue = iterator(previousValue, collection[i]);
+                    } return previousValue; 
+                  } else {
+                    for (var j in collection) {
+                      previousValue = iterator(previousValue, collection[j]);
+                    } return previousValue;
+                  }    
+                  };
+
+    return _.reduce(collection, function(isTrue) {
+      if (collection === []) {return true;}
+      else if (isTrue) {return true;}
+      else {return false;}
+    }); 
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -244,9 +263,18 @@ var _ = {};
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
-
+ 
+  
+  _.extend = function(obj, newObj) {
+    var newKeys = Object.keys(newObj);
+    for (var j = 0; j < newKeys.length; j++) {
+      var newKey = newKeys[j];
+      var newValue = newObj[newKey];
+      obj[newKey] = newObj[newValue];
+    }
+    return obj;
   };
+  
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
