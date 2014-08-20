@@ -157,15 +157,15 @@ var _ = {};
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {                    // S.O.S.
-                  _.map = function(collection, iterator) {
+                  _.map = function(collection2, iterator) {
                     var result = [];
-                    for (var i = 0; i < collection.length; i++) {
-                      result.push(iterator(collection[i], i, collection));
+                    for (var i = 0; i < collection2.length; i++) {
+                      result.push(iterator(collection2[i], i, collection2));
                     }
                     return result;  
                   };
-    return _.map(collection, function() {
-      return functionOrKey.apply(collection, args);    
+    return _.map(collection, function(objParam) {
+      return (typeof functionOrKey == "function" ? functionOrKey : objParam[functionOrKey]).apply(objParam, args);    
     }); 
   };
   
@@ -213,7 +213,7 @@ var _ = {};
     }, false);
   };
 
-
+/*
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
@@ -231,13 +231,11 @@ var _ = {};
                   }    
                   };
 
-    return _.reduce(collection, function(isTrue) {
-      if (collection === []) {return true;}
-      else if (isTrue) {return true;}
-      else {return false;}
-    }); 
+    if (collection === []) {return true;}
+    else if (return _.reduce(collection, function(isTrue) {})) {return true}  
+    else {return false} 
   };
-
+*/
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
