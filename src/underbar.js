@@ -213,29 +213,32 @@ var _ = {};
     }, false);
   };
 
-/*
+
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-                  _.reduce = function(collection, iterator, truthVal) {
-                  var initialValue = typeof truthVal === "undefined" ? true : truthVal;
-                  var previousValue = iterator(initialValue, collection[0]);
-                  if (collection.length) {
-                    for (var i = 1; i < collection.length; i++) {
-                      previousValue = iterator(previousValue, collection[i]);
-                    } return previousValue; 
-                  } else {
-                    for (var j in collection) {
-                      previousValue = iterator(previousValue, collection[j]);
-                    } return previousValue;
-                  }    
+                  _.reduce = function(collection, iterator, accumulator) {
+                    var initialValue = typeof accumulator === "undefined" ? collection[0] : accumulator;
+                    var previousValue = iterator(initialValue, collection[0]);
+                    if (collection.length) {
+                      for (var i = 1; i < collection.length; i++) {
+                        previousValue = iterator(previousValue, collection[i]);
+                        if (previousValue === false) {return previousValue;}
+                      }
+                       return previousValue; 
+                    }
+                    else {
+                      for (var j in collection) {
+                        previousValue = iterator(previousValue, collection[j]);
+                      }
+                       return previousValue;
+                    }
                   };
-
-    if (collection === []) {return true;}
-    else if (return _.reduce(collection, function(isTrue) {})) {return true}  
-    else {return false} 
+    if (collection.length === 0) {return true;}
+    else if (_.reduce(collection, iterator) === true) {return true;}  
+    else {return false;} 
   };
-*/
+
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
@@ -263,20 +266,43 @@ var _ = {};
   //   }); // obj1 now contains key1, key2, key3 and bla
  
   
-  _.extend = function(obj, newObj) {
-    var newKeys = Object.keys(newObj);
-    for (var j = 0; j < newKeys.length; j++) {
+  _.extend = function(obj) {
+    var myObjects = arguments;
+    var myKeys = Object.keys(myObjects);
+
+                  _.each = function(collection, iterator) {
+                    for (var j in collection) {
+                      iterator(collection[j], j, collection);
+                    }
+                  };
+
+    _.each(myKeys, function(key) {
+        obj[key] = myObjects[key];
+    })      
+    return obj;        
+      /*
       var newKey = newKeys[j];
       var newValue = newObj[newKey];
       obj[newKey] = newObj[newValue];
-    }
-    return obj;
+      */
   };
   
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var myObjects = arguments;
+    var myKeys = Object.keys(myObjects);
+    var initKeys = Object.keys(obj);
+    for (var i in myObjects) {
+      for (var j in myKeys) {
+         if (initKeys.indexOf(myKeys[j]) === -1) {
+          thisKey = myKeys[j];
+           obj[thisKey] = myObjects[thisKey];
+      }
+      }
+     
+    }
     return obj;
   };
 
@@ -303,7 +329,7 @@ var _ = {};
     return function() {
       if (!alreadyCalled) {
         // TIP: .apply(this, arguments) is the standard way to pass on all of the
-        // infromation from one function call to another.
+        // information from one function call to another.
         result = func.apply(this, arguments);
         alreadyCalled = true;
       }
@@ -356,6 +382,22 @@ var _ = {};
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var result = [];
+    var holder;
+    if (typeof iterator === "string") {
+      for (var i = 0; i < collection.length; i++) {
+        holder = collection[i];
+        result.push(holder[iterator]);
+      }
+      return result;
+    }
+    else if (typeof iterator === "function") {
+      for (var i = 0; i < collection.length; i++) {
+        holder = collection[i];
+        result.push(iterator(holder));
+      }
+      return result;
+    }
   };
 
   // Zip together two or more arrays with elements of the same index
