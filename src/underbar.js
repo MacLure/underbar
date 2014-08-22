@@ -94,20 +94,20 @@ var _ = {};
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    var passers = [], failers = [];
-          _.filter = function(collection, test) {
-          for (var i = 0; i < collection.length; i++) {
-            if (test(collection[i])) {
-              passers.push(collection[i]);
-            }
-          }
-          return passers;
-          }; 
+              var passers = [], failers = [];
+              _.filter = function(collection, test) {
+                for (var i = 0; i < collection.length; i++) {
+                  if (test(collection[i])) {
+                    passers.push(collection[i]);
+                  }
+                }
+              return passers;
+              }; 
     _.filter(collection, test);
     for (var i = 0; i < collection.length; i++) {
-        if (passers.indexOf(collection[i]) === -1) {
-          failers.push(collection[i]);
-        }
+      if (passers.indexOf(collection[i]) === -1) {
+        failers.push(collection[i]);
+      }
     }
     return failers;
   };
@@ -116,9 +116,9 @@ var _ = {};
   _.uniq = function(array) {
     var uniqCollect = [];
     for (var i = 0; i < array.length; i++) {
-        if (uniqCollect.indexOf(array[i]) === -1) {
-            uniqCollect.push(array[i]);
-        }
+      if (uniqCollect.indexOf(array[i]) === -1) {
+        uniqCollect.push(array[i]);
+      }
     }
     return uniqCollect;
   };
@@ -267,44 +267,71 @@ var _ = {};
  
   
   _.extend = function(obj) {
-    var myObjects = arguments;
-    var myKeys = Object.keys(myObjects);
+   var holder = [];
+  for (var i in arguments) {
+    holder.push(arguments[i]);
+  }
+  holder.shift();
+  
+  var secretVals = [];
+  for (var j in holder) {
+      for (var k in holder[j]) {
+        secretVals.push(holder[j][k]);
+      }
+  }
 
-                  _.each = function(collection, iterator) {
-                    for (var j in collection) {
-                      iterator(collection[j], j, collection);
-                    }
-                  };
-
-    _.each(myKeys, function(key) {
-        obj[key] = myObjects[key];
-    })      
-    return obj;        
-      /*
-      var newKey = newKeys[j];
-      var newValue = newObj[newKey];
-      obj[newKey] = newObj[newValue];
-      */
-  };
+  var secretKeys = [];
+  for (var l in holder) {
+      for (var m in holder[l]) {
+        secretKeys.push(m);
+      }
+  }
+    
+  for (var n = 0; n < secretKeys.length; n++) {
+      var newKey = secretKeys[n];
+      var newVal = secretVals[n];
+      obj[newKey] = newVal;
+  }
+  
+  return obj;
+ };
   
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
-  _.defaults = function(obj) {
-    var myObjects = arguments;
-    var myKeys = Object.keys(myObjects);
-    var initKeys = Object.keys(obj);
-    for (var i in myObjects) {
-      for (var j in myKeys) {
-         if (initKeys.indexOf(myKeys[j]) === -1) {
-          thisKey = myKeys[j];
-           obj[thisKey] = myObjects[thisKey];
+  _.defaults = function(obj) {          
+  var holder = [];
+  for (var i in arguments) {
+    holder.push(arguments[i]);
+  }
+  holder.shift();
+  
+  var secretVals = [];
+  for (var j in holder) {
+      for (var k in holder[j]) {
+        secretVals.push(holder[j][k]);
       }
+  }
+
+  var secretKeys = [];
+  for (var l in holder) {
+      for (var m in holder[l]) {
+        secretKeys.push(m);
       }
-     
-    }
-    return obj;
-  };
+  }
+  
+  var objKeys = Object.keys(obj);
+  
+  for (var n = 0; n < secretKeys.length; n++) {
+      if (objKeys.indexOf(secretKeys[n]) === -1 && objKeys.indexOf(secretKeys[n]) === -1) {
+        var newKey = secretKeys[n];
+        var newVal = secretVals[n];
+        obj[newKey] = newVal;
+        objKeys.push(newKey);
+      }
+  }
+  return obj;
+};
 
 
   /**
