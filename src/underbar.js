@@ -267,7 +267,7 @@ var _ = {};
  
   
   _.extend = function(obj) {
-   var holder = [];
+  var holder = [];
   for (var i in arguments) {
     holder.push(arguments[i]);
   }
@@ -292,7 +292,7 @@ var _ = {};
       var newVal = secretVals[n];
       obj[newKey] = newVal;
   }
-  
+
   return obj;
  };
   
@@ -323,7 +323,7 @@ var _ = {};
   var objKeys = Object.keys(obj);
   
   for (var n = 0; n < secretKeys.length; n++) {
-      if (objKeys.indexOf(secretKeys[n]) === -1 && objKeys.indexOf(secretKeys[n]) === -1) {
+      if (objKeys.indexOf(secretKeys[n]) === -1) {
         var newKey = secretKeys[n];
         var newVal = secretVals[n];
         obj[newKey] = newVal;
