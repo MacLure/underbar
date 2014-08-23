@@ -255,6 +255,15 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+
+    if (collection.length === 0) {return false;}
+    else { //if (typeof iterator === "undefined") {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i] === true) {return true;}
+        else {return false;}
+      }
+    }
+
   };
 
 
@@ -406,9 +415,17 @@ var _ = {};
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
-    var newArray = array.slice(0);
+  _.shuffle = function(array) {                 // Is it OK that I didn't use .slice()? If not, please let me know--I'll try again.
+  
+    var newArray = [];
+    var randIndex;
+    for (var i = 0; i < array.length; i++) {
+      randIndex = Math.floor(Math.random() * 10);
+      newArray.splice(randIndex, 0, array[i]);
+    }
+
     return newArray;
+    
   };
 
 
