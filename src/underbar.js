@@ -221,22 +221,34 @@ var _ = {};
                     var initialValue = typeof accumulator === "undefined" ? collection[0] : accumulator;
                     var previousValue = iterator(initialValue, collection[0]);
                     if (collection.length) {
-                      for (var i = 1; i < collection.length; i++) {
-                        previousValue = iterator(previousValue, collection[i]);
-                        if (previousValue === false) {return previousValue;}
+                      for (var i = 0; i < collection.length; i++) {
+                          if (previousValue === false) {return previousValue;}
+                          else if (iterator(collection[i])) {previousValue = true;}
+                          else {previousValue = false;}
+                        //if (iterator(collection[i])) {previousValue = true;}
+                        //else {return false;}
+                        //if (previousValue === false) {return previousValue;}
                       }
                        return previousValue; 
                     }
                     else {
                       for (var j in collection) {
-                        previousValue = iterator(previousValue, collection[j]);
+                        previousValue = iterator(collection[j]);
                       }
                        return previousValue;
                     }
                   };
+
+
     if (collection.length === 0) {return true;}
-    else if (_.reduce(collection, iterator) === true) {return true;}  
-    else {return false;} 
+    else if (typeof iterator === "undefined") {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i] !== true) {return false;}
+        else {return true;}
+      }
+    }
+    else if (typeof _.reduce(collection, iterator) !== "undefined") {return _.reduce(collection, iterator);}  
+    else {return true}
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -395,6 +407,8 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArray = array.slice(0);
+    return newArray;
   };
 
 
