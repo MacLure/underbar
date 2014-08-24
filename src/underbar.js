@@ -255,15 +255,6 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-
-    if (collection.length === 0) {return false;}
-    else { //if (typeof iterator === "undefined") {
-      for (var i = 0; i < collection.length; i++) {
-        if (collection[i] === true) {return true;}
-        else {return false;}
-      }
-    }
-
   };
 
 
@@ -393,6 +384,7 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -402,6 +394,13 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = [];
+    for (var i = 2; i<arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+    setTimeout(function() {
+      func.apply(this, args);
+    }, wait); 
   };
 
 
@@ -425,7 +424,7 @@ var _ = {};
     }
 
     return newArray;
-    
+
   };
 
 
