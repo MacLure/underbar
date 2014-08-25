@@ -156,7 +156,7 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {                    // S.O.S.
+  _.invoke = function(collection, functionOrKey, args) {                    
                   _.map = function(collection2, iterator) {
                     var result = [];
                     for (var i = 0; i < collection2.length; i++) {
@@ -225,9 +225,6 @@ var _ = {};
                           if (previousValue === false) {return previousValue;}
                           else if (iterator(collection[i])) {previousValue = true;}
                           else {previousValue = false;}
-                        //if (iterator(collection[i])) {previousValue = true;}
-                        //else {return false;}
-                        //if (previousValue === false) {return previousValue;}
                       }
                        return previousValue; 
                     }
@@ -241,20 +238,35 @@ var _ = {};
 
 
     if (collection.length === 0) {return true;}
-    else if (typeof iterator === "undefined") {
+    else if (!(iterator)) {
       for (var i = 0; i < collection.length; i++) {
-        if (collection[i] !== true) {return false;}
+        if (!collection[i]) {return false;}
         else {return true;}
       }
     }
     else if (typeof _.reduce(collection, iterator) !== "undefined") {return _.reduce(collection, iterator);}  
-    else {return true}
+    else {return true;}
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+      // this isn't clever, but is passing
+
+    if (collection.length === 0) {return false;}
+    else if (!(iterator)) {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i]) {return true;}
+    } return false;
+  }
+    else {
+      for (var j = 0; j < collection.length; j++) {
+        if (iterator(collection[j])) {return true;}
+      }
+      return false;
+    }
+           
   };
 
 
@@ -385,7 +397,7 @@ var _ = {};
   // instead if possible.
   _.memoize = function(func) {
 
-  };
+};
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -422,7 +434,6 @@ var _ = {};
       randIndex = Math.floor(Math.random() * 10);
       newArray.splice(randIndex, 0, array[i]);
     }
-
     return newArray;
 
   };
@@ -439,22 +450,6 @@ var _ = {};
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
-    var result = [];
-    var holder;
-    if (typeof iterator === "string") {
-      for (var i = 0; i < collection.length; i++) {
-        holder = collection[i];
-        result.push(holder[iterator]);
-      }
-      return result;
-    }
-    else if (typeof iterator === "function") {
-      for (var i = 0; i < collection.length; i++) {
-        holder = collection[i];
-        result.push(iterator(holder));
-      }
-      return result;
-    }
   };
 
   // Zip together two or more arrays with elements of the same index
