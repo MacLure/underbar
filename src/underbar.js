@@ -397,10 +397,10 @@ var _ = {};
   _.memoize = function(func) {
     var results = {};
     return function(arg){
-      if (arg in results) {
+      if (!(arg in results)) {
+        results[arg] = func(arg);
         return results[arg];
       } else {
-        results[arg] = func(arg);
         return results[arg];
       }
     }
