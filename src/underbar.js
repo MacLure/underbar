@@ -241,8 +241,7 @@ var _ = {};
     else if (!(iterator)) {
       for (var i = 0; i < collection.length; i++) {
         if (!collection[i]) {return false;}
-        else {return true;}
-      }
+      } return true;
     }
     else if (typeof _.reduce(collection, iterator) !== "undefined") {return _.reduce(collection, iterator);}  
     else {return true;}
@@ -385,7 +384,7 @@ var _ = {};
         alreadyCalled = true;
       }
       // The new function always returns the originally computed result.
-      return result;
+      return result; 
     };
   };
 
@@ -396,8 +395,18 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-
-};
+    var results = {};
+    return function(arg){
+      if (arg in results) {
+        return results[arg];
+      } else {
+        results[arg] = func(arg);
+        return results[arg];
+      }
+    }
+  };
+ 
+  
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
